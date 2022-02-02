@@ -1,4 +1,4 @@
-// const { fetchProducts } = require('helpers/fetchProducts.js');
+// const btns = document.getElementsByClassName('item__add');
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -44,4 +44,8 @@ function createCartItemElement({ sku, name, salePrice }) {
 
 window.onload = () => { 
   fetchProducts('computador', createProductItemElement);
+
+  document.querySelector('.items').addEventListener('click', function listener(event) {
+    fetchItem(event, createCartItemElement);
+  });
 };

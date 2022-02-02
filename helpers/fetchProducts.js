@@ -8,7 +8,7 @@ const fetchProducts = async (product, callback) => {
       throw new Error('You must provide an url');
     }
     const response = await (await fetch(url)).json();
-    const results = await response.results;
+    const results = response.results;
     results.forEach((result) => {
       items.appendChild(callback(nameChanger(result)));
     });
