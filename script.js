@@ -43,5 +43,5 @@ function createCartItemElement({ sku, name, salePrice }) {
 }
 
 window.onload = () => { 
-  fetchProducts('computador', createProductItemElement)
+  fetchProducts('computador', createProductItemElement);
 };
