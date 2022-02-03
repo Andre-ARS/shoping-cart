@@ -11,13 +11,13 @@ const fetchItem = async (event, callback) => {
       const response = await (await fetch(url)).json();
       
       cart.appendChild(callback(changer(response)));
-      saveCartItems(cart.innerHTML);
+      localStorage.cartItems = cart.innerHTML;
     } catch (error) {
       console.log('Produto Inválido: ', error.message);
     }
   }
 }; 
-// console.log('kks');
+console.log('sdfsdf');
 if (typeof module !== 'undefined') {
   module.exports = {
     fetchItem,

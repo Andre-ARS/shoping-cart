@@ -36,6 +36,7 @@ function cartItemClickListener(event) {
   element.outerHTML = '';
   saveCartItems(cart.innerHTML);
 }
+
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
