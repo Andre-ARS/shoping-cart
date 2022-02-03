@@ -1,25 +1,24 @@
-const changer = ({ id, title, price }) => ({ sku: id, name: title, salePrice: price });
+const changer = ({ id, title, price }) => (data = { sku: id, name: title, salePrice: price });
 
-const fetchItem = async (event, callback) => {
-  const id = event.target.parentElement.firstElementChild.innerText;
-  const url = `https://api.mercadolibre.com/items/${id}`;
+const fetchItem = async (item) => {
+  const url = `https://api.mercadolibre.com/items/${item}`;
   const cart = document.querySelector('.cart__items');
-  
-  if (event.target.className === 'item__add') {    
-    console.log(id);
-    try {
-      const response = await (await fetch(url)).json();
-      
-      cart.appendChild(callback(changer(response)));
-      localStorage.cartItems = cart.innerHTML;
-    } catch (error) {
-      console.log('Produto Inválido: ', error.message);
+
+  try {
+    if (item) {      
+      const promise = await fetch(url);
+      const response = await promise.json();
+      return response;
     }
+    throw new Error('You must provide an url');
+  } catch (error) {
+    return error;
   }
 }; 
-console.log('sdfsdf');
+
 if (typeof module !== 'undefined') {
   module.exports = {
     fetchItem,
   };
 }
+  
