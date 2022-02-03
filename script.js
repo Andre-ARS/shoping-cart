@@ -46,7 +46,7 @@ function createCartItemElement({ sku, name, salePrice }) {
 
 window.onload = () => { 
   fetchProducts('computador', createProductItemElement);
-  getSavedCartItems()
+  getSavedCartItems();
   cart.addEventListener('click', cartItemClickListener);
   document.querySelector('.items').addEventListener('click', function listener(event) {
     fetchItem(event, createCartItemElement);
