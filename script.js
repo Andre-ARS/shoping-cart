@@ -16,6 +16,12 @@ function setPrice() {
   document.querySelector('.total-price').innerText = finalPrice;
 }
 
+function emptyCart() {
+  cart.innerHTML = '';
+  localStorage.clear();
+  setPrice();
+}
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -96,6 +102,7 @@ function getStoragedItems() {
 } 
 
 window.onload = () => {
+  document.querySelector('.empty-cart').addEventListener('click', emptyCart)
   productList('computador', createProductItemElement);
   getStoragedItems();
   cart.addEventListener('click', cartItemClickListener);
