@@ -1,14 +1,14 @@
 const cart = document.querySelector('.cart__items');
 const changer = ({ id, title, price }) => ({ sku: id, name: title, salePrice: price });
 
-function setPrice () {
+function setPrice() {
   const total = document.querySelector('.total-price');
   let finalPrice = 0;
   const childs = cart.childNodes;
   childs.forEach((child) => {
     const position = child.innerText.indexOf('$') + 1;
     const strPrice = child.innerText.slice(position);
-    const numPrice = parseFloat(strPrice)
+    const numPrice = parseFloat(strPrice);
 
     finalPrice += numPrice;
   });
