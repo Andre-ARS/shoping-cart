@@ -1,5 +1,9 @@
 // const btns = document.getElementsByClassName('item__add');
 
+function sumPrice(params) {
+  
+}
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -58,7 +62,7 @@ function createCartItemElement({ sku, name, salePrice }) {
 }
 
 async function cartList(event, callback) {
-  const id = event.target.parentElement.firstElementChild.innerText;
+  const id = getSkuFromProductItem(event.target.parentElement); //.parentElement.firstElementChild.innerText;
   const response = changer(await fetchItem(id));
   if (event.target.className === 'item__add') {    
     console.log(response);
@@ -66,6 +70,7 @@ async function cartList(event, callback) {
     saveCartItems(cart.innerHTML);
   }
 }
+
 
 window.onload = () => { 
   productList('computador', createProductItemElement);

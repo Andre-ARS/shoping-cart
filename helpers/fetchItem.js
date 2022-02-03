@@ -1,4 +1,4 @@
-const changer = ({ id, title, price }) => (data = { sku: id, name: title, salePrice: price });
+const changer = ({ id, title, price }) => ({ sku: id, name: title, salePrice: price });
 
 const fetchItem = async (item) => {
   const url = `https://api.mercadolibre.com/items/${item}`;
@@ -21,4 +21,3 @@ if (typeof module !== 'undefined') {
     fetchItem,
   };
 }
-  
