@@ -1,7 +1,19 @@
-// const btns = document.getElementsByClassName('item__add');
+const cart = document.querySelector('.cart__items');
+const changer = ({ id, title, price }) => ({ sku: id, name: title, salePrice: price });
 
-function sumPrice({ salePrice }) {
-  
+function setPrice () {
+  const total = document.querySelector('.total-price');
+  let finalPrice = 0;
+  const childs = cart.childNodes;
+  childs.forEach((child) => {
+    const position = child.innerText.indexOf('$') + 1;
+    const strPrice = child.innerText.slice(position);
+    const numPrice = parseFloat(strPrice)
+
+    finalPrice += numPrice;
+  });
+
+  document.querySelector('.total-price').innerText = `SubTotal: R$ ${finalPrice.toFixed(2)}`;
 }
 
 function createProductImageElement(imageSource) {
@@ -46,11 +58,13 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-const cart = document.querySelector('.cart__items');
 function cartItemClickListener(event) {
   const element = event.target;
-  element.remove();
-  saveCartItems(cart.innerHTML);
+  if (event.target.className === 'cart__item') {
+    setPrice();
+    element.remove();
+    saveCartItems(cart.innerHTML);    
+  }
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -66,13 +80,24 @@ async function cartList(event, callback) {
   const response = changer(await fetchItem(id));
   if (event.target.className === 'item__add') {    
     cart.appendChild(callback(response));
+    setPrice();
     saveCartItems(cart.innerHTML);
   }
 }
 
+function getStoragedItems() {
+  const storage = getSavedCartItems();
+ 
+  if (localStorage.cartItems) {
+    document.querySelector('.cart__items').innerHTML = storage;
+  }  
+  setPrice();
+  cart.addEventListener('click', cartItemClickListener);
+} 
+
 window.onload = () => {
   productList('computador', createProductItemElement);
-  getSavedCartItems();
+  getStoragedItems();
   cart.addEventListener('click', cartItemClickListener);
   document.querySelector('.items').addEventListener('click', function listener(event) {
     cartList(event, createCartItemElement);

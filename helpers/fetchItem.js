@@ -1,6 +1,5 @@
 const fetchItem = async (item) => {
   const url = `https://api.mercadolibre.com/items/${item}`;
-  const cart = document.querySelector('.cart__items');
 
   try {
     if (item) {      
