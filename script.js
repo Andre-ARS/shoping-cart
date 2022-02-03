@@ -13,7 +13,7 @@ function setPrice() {
     finalPrice += numPrice;
   });
 
-  document.querySelector('.total-price').innerText = `SubTotal: R$ ${finalPrice.toFixed(2)}`;
+  document.querySelector('.total-price').innerText = finalPrice.toFixed(2);
 }
 
 function createProductImageElement(imageSource) {
