@@ -102,7 +102,7 @@ function getStoragedItems() {
 } 
 
 window.onload = () => {
-  document.querySelector('.empty-cart').addEventListener('click', emptyCart)
+  document.querySelector('.empty-cart').addEventListener('click', emptyCart);
   productList('computador', createProductItemElement);
   getStoragedItems();
   cart.addEventListener('click', cartItemClickListener);
