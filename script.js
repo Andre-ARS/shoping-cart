@@ -33,7 +33,7 @@ function getSkuFromProductItem(item) {
 const cart = document.querySelector('.cart__items');
 function cartItemClickListener(event) {
   const element = event.target;
-  element.outerHTML = '';
+  element.remove();
   saveCartItems(cart.innerHTML);
 }
 
