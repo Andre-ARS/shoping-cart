@@ -1,5 +1,6 @@
 // const btns = document.getElementsByClassName('item__add');
 
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -27,6 +28,7 @@ function createProductItemElement({ sku, name, image }) {
 }
 
 const items = document.querySelector('.items');
+const nameChanger = ({ id, title, thumbnail }) => ({ sku: id, name: title, image: thumbnail });
 
 async function productList(product, callback) {
   const response = await fetchProducts(product);

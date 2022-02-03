@@ -5,11 +5,10 @@ const fetchProducts = async (product) => {
       const promise = await fetch(url);
       const response = await promise.json();
       return response;
-    } else {
-      throw new Error('You must provide an url');
     }
+    throw new Error('You must provide an url');
   } catch (error) {
-   return error
+   return error;
   }
 };
 
