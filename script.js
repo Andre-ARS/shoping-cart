@@ -67,7 +67,7 @@ async function productList(product, callback) {
 
 async function load() {
   loading();
-  await productList('computador', createProductItemElement)
+  await productList('computador', createProductItemElement);
   document.querySelector('.loading').remove();
 }
 
