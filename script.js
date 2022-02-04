@@ -57,13 +57,17 @@ const items = document.querySelector('.items');
 const nameChanger = ({ id, title, thumbnail }) => ({ sku: id, name: title, image: thumbnail });
 
 async function productList(product, callback) {
-  loading();
   const response = await fetchProducts(product);
   const { results } = response;
 
   results.forEach((result) => {
     items.appendChild(callback(nameChanger(result)));
   });
+}
+
+async function load() {
+  loading();
+  await productList('computador', createProductItemElement)
   document.querySelector('.loading').remove();
 }
 
@@ -110,7 +114,7 @@ function getStoragedItems() {
 
 window.onload = () => {
   document.querySelector('.empty-cart').addEventListener('click', emptyCart);
-  productList('computador', createProductItemElement);
+  load();
   getStoragedItems();
   cart.addEventListener('click', cartItemClickListener);
   document.querySelector('.items').addEventListener('click', function listener(event) {
