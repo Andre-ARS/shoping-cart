@@ -22,6 +22,28 @@ body {
   width: 80%;
 }
 
+.searchbar-container {
+  position: absolute;
+  left: 84%;
+  width: 15%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 40;
+}
+
+.fa-search {
+  color: white;
+  font-size: 25px;
+}
+
+.search-bar {
+  width: 87%;
+  border: none;
+  border-radius: 5px;
+  padding: 8px;
+}
+
 .title {
   color: rgb(221, 221, 221);
   font-size: 30px;

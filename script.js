@@ -1,5 +1,6 @@
 const cart = document.querySelector('.cart__items');
 const changer = ({ id, title, price }) => ({ sku: id, name: title, salePrice: price });
+const searchBtn = document.querySelector('.fa-search');
 
 function setPrice() {
   let finalPrice = 0;
@@ -40,8 +41,8 @@ function createProductItemElement({ sku, name, image }) {
   section.className = 'item';
 
   section.appendChild(createCustomElement('span', 'item__sku', sku));
-  section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
+  section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
 
   return section;
@@ -65,9 +66,9 @@ async function productList(product, callback) {
   });
 }
 
-async function load() {
+async function load(product) {
   loading();
-  await productList('computador', createProductItemElement);
+  await productList(product, createProductItemElement);
   document.querySelector('.loading').remove();
 }
 
@@ -112,9 +113,18 @@ function getStoragedItems() {
   cart.addEventListener('click', cartItemClickListener);
 } 
 
+async function search() {
+  const searchBar = document.querySelector('.search-bar');
+  items.innerHTML = '';
+
+  await load(searchBar.value);
+  searchBar.value = '';
+}
+
 window.onload = () => {
+  searchBtn.addEventListener('click', search)
   document.querySelector('.empty-cart').addEventListener('click', emptyCart);
-  load();
+  load('computador');
   getStoragedItems();
   cart.addEventListener('click', cartItemClickListener);
   document.querySelector('.items').addEventListener('click', function listener(event) {
