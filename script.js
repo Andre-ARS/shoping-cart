@@ -64,7 +64,7 @@ async function productList(product, callback) {
   results.forEach((result) => {
     items.appendChild(callback(nameChanger(result)));
   });
-  document.querySelector('.loading').remove()
+  document.querySelector('.loading').remove();
 }
 
 function getSkuFromProductItem(item) {
