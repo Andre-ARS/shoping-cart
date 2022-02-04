@@ -2,7 +2,6 @@ const cart = document.querySelector('.cart__items');
 const changer = ({ id, title, price }) => ({ sku: id, name: title, salePrice: price });
 
 function setPrice() {
-  const total = document.querySelector('.total-price');
   let finalPrice = 0;
   const childs = cart.childNodes;
   childs.forEach((child) => {
@@ -48,16 +47,24 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
+function loading() {
+  const section = createCustomElement('section', 'loading', 'carregando...');
+  
+  document.querySelector('.items').appendChild(section);
+}
+
 const items = document.querySelector('.items');
 const nameChanger = ({ id, title, thumbnail }) => ({ sku: id, name: title, image: thumbnail });
 
 async function productList(product, callback) {
+  loading();
   const response = await fetchProducts(product);
   const { results } = response;
 
   results.forEach((result) => {
     items.appendChild(callback(nameChanger(result)));
   });
+  document.querySelector('.loading').remove()
 }
 
 function getSkuFromProductItem(item) {
