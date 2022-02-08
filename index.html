@@ -19,14 +19,17 @@
   </head>
   <body>
     <header class="header">
-      <div class="container-title">
-        <span class="title"><strong>trybe</strong>shopping</span>
-      </div>
-      <div class="searchbar-container">
-        <i class="fas fa-search"></i>        
+      <div class="container title-icons">
+        <div class="container-title">
+          <span class="title"><strong>trybe</strong>shopping</span>
+        </div>
         <input class="search-bar" type="text" value="" placeholder="Pesquise Aqui">
+        <i class="fas fa-window-close"></i>
+        <div class="icons">
+          <i class="fas fa-search"></i>        
+          <i class="material-icons cart-icon" style="font-size:45px;color:white">shopping_cart</i>
+        </div>
       </div>
-      <i class="material-icons" style="font-size:45px;color:white">shopping_cart</i>
       <div class="container-cartTitle">
         <span class="cart__title">Meu carrinho</span>
       </div>
@@ -35,8 +38,10 @@
       <section class="items"></section>
       <section class="cart">
         <ol class="cart__items"></ol>
-        <span class="total-price"></span>
-        <button class="empty-cart">Esvaziar carrinho</button>
+        <div class="price">
+          <span class="total-price"></span>
+          <button class="empty-cart">Esvaziar carrinho</button>
+        </div>
       </section>
     </section>
   </body>
