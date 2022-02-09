@@ -1,22 +1,29 @@
 const cart = document.querySelector('.cart__items');
-const changer = ({ id, title, price }) => ({ sku: id, name: title, salePrice: price });
 const searchBtn = document.querySelector('.fa-search');
 const searchBar = document.querySelector('.search-bar');
 const cartIcon = document.querySelector('.cart-icon');
 const closeCartBtn = document.querySelector('.fa-window-close');
+const items = document.querySelector('.items');
+
+const changer = ({ id, title, price, thumbnail }) => ({
+  sku: id,
+  name: title,
+  price,
+  image: thumbnail,
+});
 
 function setPrice() {
   let finalPrice = 0;
   const childs = cart.childNodes;
   childs.forEach((child) => {
-    const position = child.innerText.indexOf('$') + 1;
-    const strPrice = child.innerText.slice(position);
+    const strPrice = child.title;
     const numPrice = parseFloat(strPrice);
 
     finalPrice += numPrice;
   });
 
-  document.querySelector('.total-price').innerText = finalPrice;
+  document.querySelector('.total-price').innerText = finalPrice
+    .toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
 function emptyCart() {
@@ -39,14 +46,25 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
+const formatPrice = (price) => {
+  const value = price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+  return {
+    sifra: value.slice(0, 2),
+    valor: value.slice(3),
+  };
+};
+
 function createProductItemElement({ sku, name, image, price }) {
   const section = document.createElement('section');
   section.className = 'item';
-
+  const priceText = `<span class='sifra'>${formatPrice(price).sifra}</span>
+   <strong>${formatPrice(price).valor}</strong>`;
+  
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('span', 'item__title', name));
-  section.appendChild(createCustomElement('span', 'item__price', `<span class='sifra'>R$</span> <strong>${price.toFixed(2)}</strong>`));
+  section.appendChild(createCustomElement('span', 'item__price', priceText));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
 
   return section;
@@ -55,26 +73,24 @@ function createProductItemElement({ sku, name, image, price }) {
 function loading() {
   const section = createCustomElement('section', 'loading', '');
   const loadingText = createCustomElement('span', 'loading-text', 'carregando...');
-  const spinner = createCustomElement('i', 'fas fa-spinner', '')
+  const spinner = createCustomElement('i', 'fas fa-spinner', '');
   
   section.appendChild(loadingText);
   section.appendChild(spinner);
   document.querySelector('.items').appendChild(section);
 }
 
-const items = document.querySelector('.items');
-const nameChanger = ({ id, title, thumbnail, price }) => ({ sku: id, name: title, image: thumbnail, price });
-
 async function productList(product, callback) {
   const response = await fetchProducts(product);
   const { results } = response;
+  const errorText = `O produto '${product}', não foi encontrado! Verifique a ortografia`;
 
   if (results.length > 0) {
     results.forEach((result) => {
-      items.appendChild(callback(nameChanger(result)));
+      items.appendChild(callback(changer(result)));
     });
   } else {
-    const error = createCustomElement('span', 'error', `O produto '${product}', não foi encontrado! Verifique a ortografia`);
+    const error = createCustomElement('span', 'error', errorText);
     items.appendChild(error);    
   }
 }
@@ -90,19 +106,35 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  const element = event.target;
-  if (event.target.className === 'cart__item') {
+  const { className } = event.target;
+  if (className === 'item__image' || className === 'info__container') {
+    event.target.parentElement.remove();
     setPrice();
-    element.remove();
+    saveCartItems(cart.innerHTML);    
+  } else if (className === 'cart__item') {
+    event.target.remove();
+    setPrice();
     saveCartItems(cart.innerHTML);    
   }
 }
 
-function createCartItemElement({ sku, name, salePrice }) {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+const cartItemInfo = (name, price, sku) => {
+  const div = createCustomElement('div', 'info__container', '');
+  div.appendChild(createCustomElement('span', 'item__id info', `Cód.: ${sku}`));
+  div.appendChild(createCustomElement('span', 'item__name info', name.slice(0, 70)));
+  div.appendChild(createCustomElement('span', 'item__price info', price
+    .toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })));
+
+  return div;
+};
+
+function createCartItemElement({ image, name, price, sku }) {
+  const li = createCustomElement('li', 'cart__item', '');
+  li.title = price;
+  li.appendChild(createProductImageElement(image));
+  li.appendChild(cartItemInfo(name, price, sku));
   li.addEventListener('click', cartItemClickListener);
+
   return li;
 }
 
@@ -127,10 +159,10 @@ function getStoragedItems() {
 } 
 
 function searchBarHide() {
-  if (searchBar.style.display === '') {    
-    searchBar.style.display = 'none';
+  if (searchBar.classList.contains('hidden')) {    
+    searchBar.classList.remove('hidden');
   } else {
-    searchBar.style.display = '';
+    searchBar.classList.add('hidden');
   }
 }
 
@@ -145,29 +177,21 @@ async function search(event) {
 
 function hideCart() {
   const cartTitle = document.querySelector('.container-cartTitle');
-  const cartSection = document.querySelector('.cart')
-  if (cartTitle.style.visibility === '') {    
-    cartTitle.style.visibility = 'hidden';
-    cartTitle.style.opacity = '0';
-    cartSection.style.visibility = 'hidden';
-    cartSection.style.opacity = '0';
-    closeCartBtn.style.visibility = 'hidden';
-  } else {
-    cartSection.style.visibility = '';
-    cartTitle.style.opacity = '1';
-    cartTitle.style.visibility = '';
-    cartSection.style.opacity = '1';
-    closeCartBtn.style.visibility = '';
+  const cartSection = document.querySelector('.cart');
+  const cartElements = [cartTitle, cartSection, closeCartBtn];
+  if (cartTitle.classList.contains('hidden')) {    
+    cartElements.forEach(({ classList }) => classList.remove('hidden'));
     setPrice();
+  } else {
+    cartElements.forEach(({ classList }) => classList.add('hidden'));
   }
-
 }
 
 function events() {
   searchBtn.addEventListener('click', searchBarHide);
-  searchBar.addEventListener("keyup", search);
-  cartIcon.addEventListener('click', hideCart)
-  closeCartBtn.addEventListener('click', hideCart)
+  searchBar.addEventListener('keyup', search);
+  cartIcon.addEventListener('click', hideCart);
+  closeCartBtn.addEventListener('click', hideCart);
   document.querySelector('.empty-cart').addEventListener('click', emptyCart);
   cart.addEventListener('click', cartItemClickListener);
 }
